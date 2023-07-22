@@ -19,13 +19,23 @@ const createToken = async (user, statusCode, req, res) => {
   const token = await signToken(user._id);
 
   const status = statusCode === 201 ? 'created' : 'success';
+  let xforwarded = false;
+  console.log(req.headers);
+  if (req.headers != undefined) {
+    if (req.headers['x-forwarded-proto'] ?? false) {
+      if (req.headers['x-forwarded-proto'] === 'https') {
+        // only send cookie over https if in production#
+        xforwarded = true;
+      }
+    }
+  }
 
   const cookieOptions = {
     expires: new Date( // set cookie expiration date
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 // convert to milliseconds
     ),
     httpOnly: true,
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https', // only send cookie over https if in production
   };
   if (process.env.NODE_ENV === 'production') ctrue; // only send cookie over https if in production
 
@@ -36,7 +46,7 @@ const createToken = async (user, statusCode, req, res) => {
   return token;
 };
 const createSendToken = async (user, statusCode, req, res) => {
-  const token = await createToken(user, statusCode, res);
+  const token = await createToken(user, statusCode, req, res);
 
   const status = statusCode === 201 ? 'created' : 'success';
 
@@ -121,7 +131,7 @@ exports.validateSignup = catchAsync(async (req, res, next) => {
   if (req.api) {
     createSendToken(user, 200, req, res);
   } else {
-    const token = await createToken(user, 200, res);
+    const token = await createToken(user, 200, req, res);
     res.redirect('/me');
   }
 });
