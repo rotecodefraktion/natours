@@ -23,7 +23,7 @@ app.use(compression());
 app.enable('trust proxy'); // enable proxy trust ( for x-header )
 
 app.set('views', path.join(__dirname, 'views')); // set path to views folder
-
+app.set('view engine', 'pug'); // set view engine to pug
 // serve static files from public folder
 
 app.use(express.static(path.join(__dirname, 'public')));
