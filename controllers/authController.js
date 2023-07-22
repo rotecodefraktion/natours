@@ -15,7 +15,7 @@ const signToken = async (id) =>
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
-const createToken = async (user, statusCode, res) => {
+const createToken = async (user, statusCode, req, res) => {
   const token = await signToken(user._id);
 
   const status = statusCode === 201 ? 'created' : 'success';
@@ -25,8 +25,9 @@ const createToken = async (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 // convert to milliseconds
     ),
     httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   };
-  //if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; // only send cookie over https if in production
+  if (process.env.NODE_ENV === 'production') ctrue; // only send cookie over https if in production
 
   res.cookie('jwt', token, cookieOptions); // send cookie to client browser  (only in memory)
   //console.log(res.cookie);
@@ -34,7 +35,7 @@ const createToken = async (user, statusCode, res) => {
   user.password = undefined;
   return token;
 };
-const createSendToken = async (user, statusCode, res) => {
+const createSendToken = async (user, statusCode, req, res) => {
   const token = await createToken(user, statusCode, res);
 
   const status = statusCode === 201 ? 'created' : 'success';
@@ -118,7 +119,7 @@ exports.validateSignup = catchAsync(async (req, res, next) => {
   // Log the user in, send JWT
   //console.log(req.url);
   if (req.api) {
-    createSendToken(user, 200, res);
+    createSendToken(user, 200, req, res);
   } else {
     const token = await createToken(user, 200, res);
     res.redirect('/me');
@@ -140,7 +141,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
 
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
@@ -299,7 +300,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   await user.save();
   // Update changedPasswordAt property for the user
   // Log the user in, send JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 // Update password for logged in user
@@ -314,5 +315,5 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await updatedUser.save();
   // Update changedPasswordAt property for the user
   // Log the user in, send JWT
-  createSendToken(updatedUser, 200, res);
+  createSendToken(updatedUser, 200, req, res);
 });

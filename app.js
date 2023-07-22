@@ -20,8 +20,8 @@ const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 app.use(compression());
+app.enable('trust proxy'); // enable proxy trust ( for x-header )
 
-app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views')); // set path to views folder
 
 // serve static files from public folder
