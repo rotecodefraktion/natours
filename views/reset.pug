@@ -1,0 +1,18 @@
+extends base  
+
+block content 
+  #reset(
+     data-token=`${JSON.stringify(token)}`,
+    )
+  main.main
+    .reset-form
+      h2.heading-secondary.ma-bt-lg Reset your password
+      form.resetpwform
+        .form__group
+          label.form__label(for='password') Password
+          input#password.form__input(type='password', placeholder='••••••••', required)
+        .form__group.ma-bt-md
+          label.form__label(for='passwordConfirm') Repeat Password
+          input#passwordConfirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
+        .form__group
+          button.btn.btn--green Save Password

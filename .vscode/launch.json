@@ -1,0 +1,77 @@
+{
+  // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+  // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+  // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.1",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Dev natours local",
+      "runtimeExecutable": "nodemon",
+      "program": "${workspaceFolder}/server.js",
+      "env": {
+        "NODE_ENV": "development",
+        "DB_ENV": "local"
+      },
+      "cwd": "${workspaceFolder}/",
+      "envFile": "${workspaceFolder}/config.env",
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+      // "runtimeArgs": ["--harmony", "--no-deprecation"]
+    },
+
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Dev natours",
+      "runtimeExecutable": "nodemon",
+      "program": "${workspaceFolder}/server.js",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/4-natour/config.env",
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+      // "runtimeArgs": ["--harmony", "--no-deprecation"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Prod natours",
+      "runtimeExecutable": "nodemon",
+      "program": "${workspaceFolder}/server.js",
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/config.env",
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Prod natours local",
+      "runtimeExecutable": "nodemon",
+      "program": "${workspaceFolder}/server.js",
+      "env": {
+        "NODE_ENV": "production",
+        "DB_ENV": "local"
+      },
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/config.env",
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

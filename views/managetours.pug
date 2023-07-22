@@ -1,0 +1,115 @@
+extend base
+
+mixin sortTour(isSelected, selectValue, selectText) 
+  if isSelected === selectValue
+    option('selected' value=selectValue)= selectText
+  else
+    option(value=selectValue)= selectText
+    
+mixin sortOrder(isSelected, selectValue, selectText) 
+  if isSelected === selectValue
+    option('selected' value=selectValue)= selectText
+  else
+    option(value=selectValue)= selectText
+
+  
+mixin navigation(active, href, icon, text)   
+  li(class=active ? 'side-nav--active' : 'side-nav__item')
+    a.side-nav__link(href=href)
+      svg.side-nav__icon
+        use(xlink:href=`/img/icons.svg#${icon}`)
+      span= text
+
+mixin toursOnPage(actualLimit, sort, order, page, limit)   
+  - const actLimit = actualLimit * 1
+  - const alimit = limit * 1
+  if ( !actLimit && !alimit ) || ( actLimit === alimit )
+    li(class='tours__onside_list_active')
+      a(class='tours__onside_list_active')= limit
+  else 
+    li
+      a(href=`/managetours?page=${page}&sort=${sort}&order=${order}&limit=${limit}`)= limit
+
+block content
+  main.main
+    .user-view
+      nav.user-view__menu
+        ul.side-nav
+          +navigation(false, '/me', 'icon-settings', 'Settings')
+          +navigation(true, '/mytours', 'icon-briefcase', 'My bookings')
+          +navigation(false, '#', 'icon-star', 'My reviews')
+          +navigation(false, '#', 'icon-credit-card', 'Billing')
+        
+        .admin-nav
+          h5.admin-nav__heading Admin
+          ul.side-nav
+            +navigation(true, '/managetours', 'icon-map', 'Manage tours')
+            +navigation(false, '#', 'icon-users', 'Manage users')
+            +navigation(false, '#', 'icon-star', 'Manage reviews')
+            +navigation(false, '#', 'icon-briefcase', 'Manage bookings')
+        //- TODO: Add page per site after changing the order field
+      .user-view__content
+        .user-view__form-container.manage-tours
+          .manage-tours__header-container
+            h2.heading-secondary.manage-tours__header-left Manage your tours
+            button.btn.btn--small.btn--green.manager-tours__header-right
+              a(href='/managetours/new') Create new tour
+          .header__line-managetours
+            .header__line-managetours-left
+              #pageLimit(
+                data-limit=`${JSON.stringify(limit)}`
+              ) 
+              label.sort_label(for='tourSort') Sort by
+              .select__sortinput 
+                select#tourSort(name="sort")
+                  +sortTour(`${sort}`, 'name', 'Name')
+                  +sortTour(`${sort}`, 'price', 'Price')
+                  +sortTour(`${sort}`, 'ratingsAverage', 'Rating')
+                  +sortTour(`${sort}`, 'ratingsQuantity', 'Number of ratings')
+                  +sortTour(`${sort}`, 'difficulty', 'Difficulty')
+                  +sortTour(`${sort}`, 'duration', 'Duration')
+                  +sortTour(`${sort}`, 'maxGroupSize', 'Group size')
+                  +sortTour(`${sort}`, 'startDates', 'Start date')
+                  +sortTour(`${sort}`, 'startLocation', 'Start location')
+              label.order_label(for='sortOrder') Order
+              .select__sortorder
+                select#tourOrder(name="order")
+                  +sortOrder(`${order}`, '1', 'Ascending') 
+                  +sortOrder(`${order}`, '-1', 'Descending')
+            .header__line-managetours-right       
+              .tours__onside_list
+                p.tours__onside Tours on Page
+                ul 
+                  +toursOnPage(`${limit}`, `${sort}`, `${order}`, 1, '4') 
+                  +toursOnPage(`${limit}`, `${sort}`, `${order}`, 1, '8') 
+                  +toursOnPage(`${limit}`, `${sort}`, `${order}`, 1, '12') 
+                  +toursOnPage(`${limit}`, `${sort}`, `${order}`, 1, 'all') 
+              .header__line-managetours.line__pagination
+                span Page No.
+                if page === 1
+                  button#pageminus.btn-pagi(disabled)
+                    svg.btn-tours-disabled
+                      use(xlink:href='img/icons.svg#icon-arrow-left')
+                else 
+                  button#pageminus.btn-pagi
+                  - const pageminus = page - 1 ;
+                    a(href=`/managetours?page=${pageminus}&sort=${sort}&order=${order}&limit=${limit}`) 
+                      svg.btn-tours
+                        use(xlink:href='img/icons.svg#icon-arrow-left')
+                span.page__number= page
+                if lastpage
+                  button#pageplus.btn-pagi(disabled)
+                    svg.btn-tours-disabled
+                     use(xlink:href='img/icons.svg#icon-arrow-right')
+                else
+                  button#pageplus.btn-pagi
+                    - const pageplus = page + 1 ;
+                    a(href=`/managetours?page=${pageplus}&sort=${sort}&order=${order}&limit=${limit}`)  
+                      svg.btn-tours
+                        use(xlink:href='img/icons.svg#icon-arrow-right')
+        .line__manage
+        .card-container-manage
+          - const cardButtonText = 'Edit';
+          each tour in tours
+            include _card
+            

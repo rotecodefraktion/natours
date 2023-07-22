@@ -1,0 +1,39 @@
+extend base
+
+mixin navigation(active, href, icon, text)   
+  li(class=active ? 'side-nav--active' : 'side-nav__item')
+    a.side-nav__link(href=href)
+      svg.side-nav__icon
+        use(xlink:href=`/img/icons.svg#${icon}`)
+      span= text
+
+block content
+  main.main
+    .user-view
+      nav.user-view__menu
+        ul.side-nav
+          +navigation(false, '/me', 'icon-settings', 'Settings')
+          +navigation(true, '/mytours', 'icon-briefcase', 'My bookings')
+          +navigation(false, '#', 'icon-star', 'My reviews')
+          +navigation(false, '#', 'icon-credit-card', 'Billing')
+        - const role = user.role;
+        if ( role === 'admin' ) 
+          .admin-nav
+            h5.admin-nav__heading Admin
+            ul.side-nav
+              +navigation(true, '/managetours', 'icon-map', 'Manage tours')
+              +navigation(false, '#', 'icon-users', 'Manage users')
+              +navigation(false, '#', 'icon-star', 'Manage reviews')
+              +navigation(false, '#', 'icon-briefcase', 'Manage bookings')
+        //- TODO: Add page per site after changing the order field
+      .user-view__content
+        .user-view__form-container.manage-tours
+          .manage-tours__header-container
+            h2.heading-secondary.manage-tours__header-left Your booked tours
+          line &nbsp;
+          line &nbsp;
+        .card-container-manage
+          - const cardButtonText = 'Details';
+          each tour in tours
+            include _card
+            

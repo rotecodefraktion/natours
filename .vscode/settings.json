@@ -1,0 +1,14 @@
+{
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": true,
+  "editor.minimap.enabled": false,
+  "workbench.statusBar.visible": true,
+  "workbench.activityBar.visible": true,
+  "editor.wordWrap": "on",
+  "editor.trimAutoWhitespace": false,
+  "eslint.run": "onSave",
+  "editor.cursorSmoothCaretAnimation": "explicit",
+  "editor.smoothScrolling": false,
+  "eslint.newline-after-import": false,
+  "terminal.integrated.fontFamily": "MesloLGS NF"
+}
