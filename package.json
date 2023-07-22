@@ -7,13 +7,13 @@
     "main": false
   },
   "scripts": {
-    "start": "nodemon server.js",
-    "start:local": "DB_ENV=local nodemon server.js",
-    "start:localprod": "DB_ENV=local NODE_ENV=production nodemon server.js",
-    "start:prod": "NODE_ENV=production nodemon server.js",
+    "start": "NODE_ENV=production node server.js",
+    "dev:local": "DB_ENV=local nodemon server.js",
+    "dev:localprod": "DB_ENV=local NODE_ENV=production nodemon server.js",
+    "prd": "NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js",
-    "dev": "webpack --mode development",
-    "build": "webpack --mode production"
+    "dev:webpack": "webpack --mode development",
+    "prd:webpack": "webpack --mode production"
   },
   "author": "David Krcek",
   "license": "ISC",
@@ -60,6 +60,6 @@
     "webpack-cli": "^5.1.4"
   },
   "engines": {
-    "node": ">=8.3.0"
+    "node": ">=10.0.0"
   }
 }
